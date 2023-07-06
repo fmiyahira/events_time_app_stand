@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  events_time_microapp_ds:
+    path: "../events_time_microapp_ds"
+  flutter_flavorizr: ^2.1.6
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -46,6 +49,30 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+
+flavorizr:
+  flavors:
+    dev:
+      app:
+        name: "EventsTime (DEV)"
+      android:
+        applicationId: "com.dev.events.time"
+      ios:
+        bundleId: "com.dev.events.time"
+    hom:
+      app:
+        name: "EventsTime (HOM)"
+      android:
+        applicationId: "com.hom.events.time"
+      ios:
+        bundleId: "com.hom.events.time"
+    prd:
+      app:
+        name: "EventsTime"
+      android:
+        applicationId: "com.prd.events.time"
+      ios:
+        bundleId: "com.prd.events.time"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
