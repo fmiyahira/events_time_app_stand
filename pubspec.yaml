@@ -32,7 +32,10 @@ dependencies:
     sdk: flutter
   events_time_microapp_ds:
     path: "../events_time_microapp_ds"
+  events_time_microapp_dependencies:
+    path: "../events_time_microapp_dependencies"
   flutter_flavorizr: ^2.1.6
+  permission_handler: ^10.4.2
 
 
   # The following adds the Cupertino Icons font to your application.

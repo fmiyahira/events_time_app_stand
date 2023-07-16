@@ -1,4 +1,5 @@
-import 'package:events_time_app_stand/src/features/auth/presentation/pages/login_page.dart';
+import 'package:events_time_app_stand/src/features/home_cashier/presentation/home_cashier_page.dart';
+import 'package:events_time_app_stand/src/features/shared/presentation/widgets/menu_drawer.dart';
 import 'package:events_time_microapp_ds/events_time_microapp_ds.dart';
 import 'package:flutter/material.dart';
 
@@ -13,16 +14,9 @@ class SelectConfigurationPage extends StatefulWidget {
 }
 
 class _SelectConfigurationPageState extends State<SelectConfigurationPage> {
-  void _doLogout() {
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      LoginPage.routeName,
-      (_) => false,
-    );
-  }
-
   void _confirmConfiguration() {
     Navigator.of(context).pushNamedAndRemoveUntil(
-      LoginPage.routeName,
+      HomeCashierPage.routeName,
       (_) => false,
     );
   }
@@ -30,13 +24,23 @@ class _SelectConfigurationPageState extends State<SelectConfigurationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const MenuDrawerWidget(),
       backgroundColor: DSColors.neutral.s100,
+      appBar: DSNavBar(
+        leading: Builder(
+          builder: (BuildContext context) => DSIconButton(
+            icon: Icons.menu,
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
+      ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(kLayoutSpacerS),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: kLayoutSpacerS),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               DSText(
                 'Configuração',
@@ -47,7 +51,7 @@ class _SelectConfigurationPageState extends State<SelectConfigurationPage> {
                 'Selecione o evento e estande',
                 type: DSTextType.BODY,
               ),
-              const SizedBox(height: kLayoutSpacerM),
+              const SizedBox(height: kLayoutSpacerXL),
               DSSelect(
                 labelText: 'Evento',
                 screenContext: context,
@@ -87,22 +91,13 @@ class _SelectConfigurationPageState extends State<SelectConfigurationPage> {
                   Navigator.of(context).pop();
                 },
               ),
-              const SizedBox(height: kLayoutSpacerS),
-              DSButton(
-                size: DSButtonSize.SMALL,
-                text: 'Confirmar',
-                buttonStyle: DSButtonStyle.PRIMARY,
-                onPressed: _confirmConfiguration,
-              ),
-              DSLinkButton(
-                size: DSLinkButtonSize.SMALL,
-                text: 'Acessar com outro usuário',
-                textType: DSInteractiveTextType.ACTION_SMALL,
-                onPressed: _doLogout,
-              ),
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: DSButtonBar(
+        primaryButtonText: 'Confirmar',
+        primaryOnPressed: _confirmConfiguration,
       ),
     );
   }
