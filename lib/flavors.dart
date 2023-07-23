@@ -10,16 +10,24 @@ class F {
   static String get name => appFlavor?.name ?? '';
 
   static String get title {
-    switch (appFlavor) {
+    switch (appFlavor ?? Flavor.dev) {
       case Flavor.dev:
         return 'EventsTime (DEV)';
       case Flavor.hom:
         return 'EventsTime (HOM)';
       case Flavor.prd:
         return 'EventsTime';
-      default:
-        return 'title';
     }
   }
 
+  static String get baseUrl {
+    switch (appFlavor ?? Flavor.dev) {
+      case Flavor.dev:
+        return 'http://localhost:5000';
+      case Flavor.hom:
+        return 'http://localhost:5000';
+      case Flavor.prd:
+        return 'http://localhost:5000';
+    }
+  }
 }

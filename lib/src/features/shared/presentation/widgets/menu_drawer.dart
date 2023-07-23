@@ -1,4 +1,3 @@
-import 'package:events_time_app_stand/src/features/auth/presentation/pages/login_page.dart';
 import 'package:events_time_app_stand/src/features/configuration/presentation/pages/select_configuration_page.dart';
 import 'package:events_time_microapp_ds/events_time_microapp_ds.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,7 @@ class MenuDrawerWidget extends StatefulWidget {
 class _MenuDrawerWidgetState extends State<MenuDrawerWidget> {
   void _doLogout() {
     Navigator.of(context).pushNamedAndRemoveUntil(
-      LoginPage.routeName,
+      '/auth/login',
       (_) => false,
     );
   }
@@ -78,8 +77,9 @@ class _MenuDrawerWidgetState extends State<MenuDrawerWidget> {
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: kComponentSpacerXXL),
+            padding: const EdgeInsets.symmetric(
+              horizontal: kComponentSpacerXXL,
+            ),
             child: DSNavListItemIcon(
               leading: Icons.exit_to_app,
               title: 'Logout',

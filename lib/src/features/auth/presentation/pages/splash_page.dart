@@ -1,4 +1,3 @@
-import 'package:events_time_app_stand/src/features/auth/presentation/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -26,7 +25,10 @@ class _SplashPageState extends State<SplashPage> {
 
     // if (!hasLoggedUser) {
     await Future<void>.delayed(const Duration(seconds: 2));
-    Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
+
+    Navigator.of(context).pushReplacementNamed(
+      '/auth/login',
+    );
     // return;
     // }
 

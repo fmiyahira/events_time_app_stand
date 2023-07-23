@@ -34,7 +34,7 @@ class _HomeCashierPageState extends State<HomeCashierPage>
   @override
   void dispose() {
     tabController.dispose();
-    scannerQRCode.controller!.dispose();
+    scannerQRCode.dispose();
     super.dispose();
   }
 
@@ -45,7 +45,14 @@ class _HomeCashierPageState extends State<HomeCashierPage>
       screenContext: context,
       title: 'Ler QR-Code da impressora',
       child: scannerQRCode.view((Barcode barcode) {
-        print(barcode);
+        Navigator.of(context).pop();
+        DSDialog(
+          parentContext: context,
+          title: 'QR-CODE',
+          message: barcode.code!,
+          buttonText: 'OK',
+          buttonOnPressed: () => Navigator.of(context).pop(),
+        ).show();
       }, context),
     ).show();
   }
@@ -55,7 +62,14 @@ class _HomeCashierPageState extends State<HomeCashierPage>
       screenContext: context,
       title: 'Ler QR-Code do Voucher',
       child: scannerQRCode.view((Barcode barcode) {
-        print(barcode);
+        Navigator.of(context).pop();
+        DSDialog(
+          parentContext: context,
+          title: 'QR-CODE',
+          message: barcode.code!,
+          buttonText: 'OK',
+          buttonOnPressed: () => Navigator.of(context).pop(),
+        ).show();
       }, context),
     ).show();
   }
