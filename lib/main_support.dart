@@ -22,17 +22,24 @@ Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
 Future<void> initialize() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final IRequesting requesting = Requesting(baseUrl: F.baseUrl);
   final IInjector injector = AppInjector();
+  final ILocalStorage localStorage = LocalStorageSembastImpl(
+    await SembastImpl().openDatabase(),
+  );
+  final IRequesting requesting = Requesting(
+    baseUrl: F.baseUrl,
+    localStorage: localStorage,
+  );
 
   for (final ISubApp subApp in subAppsRegistered) {
     final SubAppRegistration registration = subApp.register();
 
-    allRoutes.addAll(registration.routes);
+    if (registration.routes != null) allRoutes.addAll(registration.routes!);
 
     await subApp.initialize(
       requesting: requesting,
       injector: injector,
+      localStorage: localStorage,
     );
   }
 
