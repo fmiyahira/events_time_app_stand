@@ -1,5 +1,5 @@
-import 'package:events_time_app_stand/main_support.dart';
+import 'package:events_time_app_stand/app_stand.dart';
 
-void main() => initialize();
+void main() => AppStand().initialize();
 
 void buildFromFlavor() => main();
