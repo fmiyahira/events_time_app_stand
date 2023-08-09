@@ -1,4 +1,6 @@
 import 'package:events_time_app_stand/flavors.dart';
+import 'package:events_time_app_stand/src/core/plugins/register_dependencies_plugins.dart';
+import 'package:events_time_app_stand/src/features/menu/core/register_dependencies_menu.dart';
 import 'package:events_time_app_stand/src/routes/routes.dart';
 import 'package:events_time_microapp_auth/events_time_microapp_auth.dart';
 import 'package:events_time_microapp_dependencies/events_time_microapp_dependencies.dart';
@@ -27,6 +29,14 @@ class AppStand {
       microappAuthConfig: MicroappAuthConfig(
         authGoalEnum: AuthGoalEnum.user,
         destinationAfterLogin: SelectConfigurationPage.routeName,
+        callbackAfterLogin: (UserModel userModel) {
+          AppStand().userLogged = userModel;
+        },
+        callbackAfterLogout: () {
+          AppStand().eventSelected = null;
+          AppStand().standSelected = null;
+          AppStand().userLogged = null;
+        },
       ),
     ),
   ];
@@ -37,6 +47,7 @@ class AppStand {
 
   RelatedEventModel? eventSelected;
   RelatedStandModel? standSelected;
+  UserModel? userLogged;
 
   Future<void> initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -65,6 +76,8 @@ class AppStand {
     // Register dependencies
     final List<IRegisterDependencies> listInternalDependencies =
         <IRegisterDependencies>[
+      RegisterDependenciesPlugins(),
+      RegisterDependenciesMenu(),
       RegisterDependenciesConfiguration(),
     ];
 

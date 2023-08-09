@@ -8,11 +8,11 @@ class RelatedEventsAndStandsModel {
     required this.events,
   });
 
-  factory RelatedEventsAndStandsModel.fromMap(List<Map<String, dynamic>> list) {
+  factory RelatedEventsAndStandsModel.fromMap(List<dynamic> list) {
     return RelatedEventsAndStandsModel(
       events: List<RelatedEventModel>.from(
         list.map<RelatedEventModel>(
-          (Map<String, dynamic> x) => RelatedEventModel.fromMap(x),
+          (dynamic x) => RelatedEventModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
     );

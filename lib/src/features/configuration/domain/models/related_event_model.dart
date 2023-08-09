@@ -18,8 +18,8 @@ class RelatedEventModel {
       id: map['id'] as int,
       name: map['name'] as String,
       stands: List<RelatedStandModel>.from(
-        (map['stands'] as List<Map<String, dynamic>>).map<RelatedStandModel>(
-          (Map<String, dynamic> x) => RelatedStandModel.fromMap(x),
+        (map['stands'] as List<dynamic>).map<RelatedStandModel>(
+          (dynamic x) => RelatedStandModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
     );

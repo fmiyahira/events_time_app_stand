@@ -1,5 +1,7 @@
-import 'package:events_time_app_stand/src/features/shared/presentation/widgets/menu_drawer.dart';
-import 'package:events_time_microapp_dependencies/events_time_microapp_dependencies.dart';
+import 'package:events_time_app_stand/app_stand.dart';
+import 'package:events_time_app_stand/src/core/plugins/bluetooth_printer/bluetooth_printer.dart';
+import 'package:events_time_app_stand/src/core/plugins/scanner_qrcode/scanner_qrcode.dart';
+import 'package:events_time_app_stand/src/features/menu/presentation/widgets/menu_drawer.dart';
 import 'package:events_time_microapp_ds/events_time_microapp_ds.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +18,7 @@ class _HomeCashierPageState extends State<HomeCashierPage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   late ScannerQRCode scannerQRCode;
+  final IBluetoothPrinter bluetoothPrinter = AppStand().injector.get();
 
   @override
   void reassemble() {
@@ -38,13 +41,18 @@ class _HomeCashierPageState extends State<HomeCashierPage>
     super.dispose();
   }
 
-  void _newShoppingCart() {}
+  void _newShoppingCart() {
+    bluetoothPrinter.printPage();
+  }
 
-  void _showConfigurePrinterBottomSheet() {
+  Future<void> _showConfigurePrinterBottomSheet() async {
+    await bluetoothPrinter.disconnectDevice();
     DSBottomSheet(
       screenContext: context,
       title: 'Ler QR-Code da impressora',
-      child: scannerQRCode.view((Barcode barcode) {
+      child: scannerQRCode.view((Barcode barcode) async {
+        await bluetoothPrinter.connectDevice(barcode.code!);
+
         Navigator.of(context).pop();
         DSDialog(
           parentContext: context,
