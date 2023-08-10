@@ -1,5 +1,6 @@
 import 'package:events_time_app_stand/app_stand.dart';
 import 'package:events_time_app_stand/src/core/plugins/bluetooth_printer/bluetooth_printer.dart';
+import 'package:events_time_app_stand/src/core/plugins/bluetooth_printer/ds_printer_component_mock.dart';
 import 'package:events_time_app_stand/src/core/plugins/scanner_qrcode/scanner_qrcode.dart';
 import 'package:events_time_app_stand/src/features/menu/presentation/widgets/menu_drawer.dart';
 import 'package:events_time_microapp_ds/events_time_microapp_ds.dart';
@@ -41,8 +42,8 @@ class _HomeCashierPageState extends State<HomeCashierPage>
     super.dispose();
   }
 
-  void _newShoppingCart() {
-    bluetoothPrinter.printPage();
+  Future<void> _newShoppingCart() async {
+    await bluetoothPrinter.printContent(await printAllComponents());
   }
 
   Future<void> _showConfigurePrinterBottomSheet() async {

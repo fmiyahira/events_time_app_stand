@@ -7,8 +7,8 @@ import 'package:flutter_simple_bluetooth_printer/flutter_simple_bluetooth_printe
 class RegisterDependenciesPlugins implements IRegisterDependencies {
   @override
   Future<void> register() async {
-    AppStand().injector.registerFactory<IBluetoothPrinter>(
-          () => BluetoothPrinterImpl(
+    AppStand().injector.registerSingleton<IBluetoothPrinter>(
+          BluetoothPrinterImpl(
             bluetoothManager: FlutterSimpleBluetoothPrinter.instance,
           ),
         );

@@ -12,7 +12,19 @@ class BluetoothPrinterImpl implements IBluetoothPrinter {
     required this.bluetoothManager,
   });
 
-  bool isConnected = false;
+  bool _isConnected = false;
+  @override
+  set isConnected(bool value) => _isConnected = value;
+
+  @override
+  bool get isConnected => _isConnected;
+
+  String _lastPrinterConnected = '';
+  @override
+  set lastPrinterConnected(String value) => _lastPrinterConnected = value;
+
+  @override
+  String get lastPrinterConnected => _lastPrinterConnected;
 
   Future<bool> discovery(String address) async {
     final Completer<bool> completer = Completer<bool>();
@@ -67,7 +79,8 @@ class BluetoothPrinterImpl implements IBluetoothPrinter {
 
       if (!isSuccess) return false;
       isConnected = true;
-      feed();
+      lastPrinterConnected = address;
+      printContent(await feed());
 
       return true;
     } on BTException catch (e) {
@@ -77,84 +90,30 @@ class BluetoothPrinterImpl implements IBluetoothPrinter {
   }
 
   @override
-  Future<void> feed() async {
-    final CapabilityProfile profile = await CapabilityProfile.load();
-
-    final Generator generator = Generator(PaperSize.mm58, profile);
-    List<int> bytes = <int>[];
-
-    bytes += generator.feed(1);
-    final Uint8List bytess = Uint8List.fromList(bytes);
+  Future<bool> printContent(List<int> bytes) async {
     try {
-      await bluetoothManager.writeRawData(
-        bytess,
+      return bluetoothManager.writeRawData(
+        Uint8List.fromList(bytes),
         characteristicUuid: 'BEF8D6C9-9C21-4C9E-B632-BD58C1009F9F',
       );
     } on BTException catch (e) {
       if (kDebugMode) print(e);
+      return false;
     }
   }
 
-  @override
-  Future<void> printPage() async {
+  Future<List<int>> feed() async {
     final CapabilityProfile profile = await CapabilityProfile.load();
 
     final Generator generator = Generator(PaperSize.mm58, profile);
-    List<int> bytes = <int>[];
-    bytes += generator.setGlobalCodeTable('CP1252');
-    bytes += generator.text(
-      'EventsTime',
-      styles: const PosStyles(
-        align: PosAlign.center,
-        bold: true,
-        underline: true,
-        fontType: PosFontType.fontA,
-      ),
-    );
-    bytes += generator.text(
-      'Voucher - EventsTime',
-      styles: const PosStyles(
-        align: PosAlign.center,
-        bold: true,
-        underline: true,
-        fontType: PosFontType.fontB,
-      ),
-    );
-    bytes += generator.text(
-      'Voucher - EventsTime',
-      styles: const PosStyles(
-        align: PosAlign.center,
-        bold: true,
-        underline: true,
-        reverse: true,
-      ),
-    );
-    bytes += generator.text(
-      'Voucher - EventsTime',
-      styles: const PosStyles(
-        align: PosAlign.center,
-        bold: true,
-        underline: true,
-      ),
-    );
-    bytes += generator.hr();
-    bytes += generator.text(r'Coca 200ml: R$ 5,00');
-    bytes += generator.text('');
-    bytes += generator.cut();
-    final Uint8List bytess = Uint8List.fromList(bytes);
-    try {
-      await bluetoothManager.writeRawData(
-        bytess,
-        characteristicUuid: 'BEF8D6C9-9C21-4C9E-B632-BD58C1009F9F',
-      );
-    } on BTException catch (e) {
-      if (kDebugMode) print(e);
-    }
+    return generator.feed(1);
   }
 
   @override
-  Future<bool> disconnectDevice() async {
+  Future<bool> disconnectDevice([bool clear = false]) async {
     isConnected = false;
+    if (clear) lastPrinterConnected = '';
+
     try {
       return bluetoothManager.disconnect();
     } on BTException catch (e) {

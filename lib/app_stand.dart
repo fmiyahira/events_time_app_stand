@@ -1,4 +1,5 @@
 import 'package:events_time_app_stand/flavors.dart';
+import 'package:events_time_app_stand/src/core/plugins/bluetooth_printer/bluetooth_printer.dart';
 import 'package:events_time_app_stand/src/core/plugins/register_dependencies_plugins.dart';
 import 'package:events_time_app_stand/src/features/menu/core/register_dependencies_menu.dart';
 import 'package:events_time_app_stand/src/routes/routes.dart';
@@ -90,8 +91,42 @@ class AppStand {
   }
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final IBluetoothPrinter bluetoothPrinter = AppStand().injector.get();
+
+    switch (state) {
+      case AppLifecycleState.resumed:
+        if (bluetoothPrinter.lastPrinterConnected.isNotEmpty)
+          bluetoothPrinter.connectDevice(bluetoothPrinter.lastPrinterConnected);
+        break;
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.inactive:
+        if (bluetoothPrinter.isConnected) bluetoothPrinter.disconnectDevice();
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
