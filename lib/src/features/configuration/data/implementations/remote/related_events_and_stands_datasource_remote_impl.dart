@@ -4,7 +4,8 @@ import 'package:events_time_microapp_dependencies/events_time_microapp_dependenc
 
 class RelatedEventsAndStandsDatasourceRemoteImpl
     implements IRelatedEventsAndStandsDatasourceRemote {
-  static const String ENDPOINT_RELATED_EVENTS_AND_STANDS_ID = '/api/events/';
+  static const String ENDPOINT_RELATED_EVENTS_AND_STANDS_ID =
+      '/api/mobile/events/';
   final IRequesting requesting;
 
   RelatedEventsAndStandsDatasourceRemoteImpl(this.requesting);

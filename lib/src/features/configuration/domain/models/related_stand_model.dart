@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 class RelatedStandModel {
@@ -18,4 +20,17 @@ class RelatedStandModel {
       isCashier: map['is_cashier'] as bool,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'is_cashier': isCashier,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory RelatedStandModel.fromJson(String source) =>
+      RelatedStandModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

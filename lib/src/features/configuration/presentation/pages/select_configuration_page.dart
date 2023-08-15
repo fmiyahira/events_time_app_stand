@@ -132,6 +132,9 @@ class _SelectConfigurationPageState extends State<SelectConfigurationPage> {
                 );
               }
 
+              final bool formLoading =
+                  state is LoadingConfirmConfigurationState;
+
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,9 +152,10 @@ class _SelectConfigurationPageState extends State<SelectConfigurationPage> {
                     DSSelect(
                       labelText: 'Evento',
                       screenContext: context,
-                      enabled: selectConfigurationStore
-                              .releatedEventsAndStandsModel !=
-                          null,
+                      enabled: !formLoading &&
+                          selectConfigurationStore
+                                  .releatedEventsAndStandsModel !=
+                              null,
                       children: selectConfigurationStore
                               .releatedEventsAndStandsModel?.events
                               .map((RelatedEventModel e) =>
@@ -181,7 +185,7 @@ class _SelectConfigurationPageState extends State<SelectConfigurationPage> {
                       labelText: 'Estande',
                       controller: controllerSelectStand,
                       screenContext: context,
-                      enabled:
+                      enabled: !formLoading &&
                           selectConfigurationStore.relatedEventModelSelected !=
                               null,
                       children: selectConfigurationStore
@@ -221,10 +225,34 @@ class _SelectConfigurationPageState extends State<SelectConfigurationPage> {
           SelectConfigurationState state,
           _,
         ) {
-          return DSButtonBar(
-            primaryButtonText: 'Confirmar',
-            primaryOnPressed: selectConfigurationStore.confirmConfiguration,
-            primaryButtonEnabled: selectConfigurationStore.validationOk,
+          return Container(
+            padding: const EdgeInsets.all(24.0),
+            decoration: BoxDecoration(
+              color: DSColors.neutral.s100,
+              border: Border(
+                top: BorderSide(
+                  color: DSColors.neutral.s88,
+                ),
+              ),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: DSColors.neutral.s88,
+                  spreadRadius: -4,
+                  blurRadius: 8.0,
+                  offset: const Offset(0, 4),
+                )
+              ],
+            ),
+            child: DSPhaseButton(
+              text: 'Confirmar',
+              size: DSPhaseButtonSize.SMALL,
+              onPressed: selectConfigurationStore.confirmConfiguration,
+              enabled: selectConfigurationStore.validationOk,
+              state: state is LoadingConfirmConfigurationState ||
+                      state is ConfirmedConfigurationState
+                  ? DSPhaseButtonState.IN_PROGRESS
+                  : DSPhaseButtonState.INITIAL,
+            ),
           );
         },
       ),

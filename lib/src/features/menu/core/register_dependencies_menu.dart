@@ -9,6 +9,8 @@ class RegisterDependenciesMenu implements IRegisterDependencies {
     AppStand().injector.registerFactory<MenuStore>(
           () => MenuStore(
             logoutUsecase: AppStand().injector.get(),
+            deleteSelectedEventUsecase: AppStand().injector.get(),
+            deleteSelectedStandUsecase: AppStand().injector.get(),
           ),
         );
   }

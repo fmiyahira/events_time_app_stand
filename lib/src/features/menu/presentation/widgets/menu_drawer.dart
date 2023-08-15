@@ -95,8 +95,8 @@ class _MenuDrawerWidgetState extends State<MenuDrawerWidget> {
                         onTap: () {},
                         leading: Icons.person_2_outlined,
                       ),
-                      if (AppStand().eventSelected != null &&
-                          AppStand().standSelected != null)
+                      if (AppStand().selectedEvent != null &&
+                          AppStand().selectedStand != null)
                         DSNavListItemIcon(
                           title: 'Gerenciar estande',
                           onTap: isLoading ? null : () {},

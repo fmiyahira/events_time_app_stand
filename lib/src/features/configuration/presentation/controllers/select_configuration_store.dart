@@ -1,5 +1,7 @@
 import 'package:events_time_app_stand/app_stand.dart';
 import 'package:events_time_app_stand/src/features/configuration/domain/interfaces/usecases/get_related_events_and_stands_usecase.dart';
+import 'package:events_time_app_stand/src/features/configuration/domain/interfaces/usecases/set_selected_event_usecase.dart';
+import 'package:events_time_app_stand/src/features/configuration/domain/interfaces/usecases/set_selected_stand_usecase.dart';
 import 'package:events_time_app_stand/src/features/configuration/domain/models/related_event_model.dart';
 import 'package:events_time_app_stand/src/features/configuration/domain/models/related_events_and_stands_model.dart';
 import 'package:events_time_app_stand/src/features/configuration/domain/models/related_stand_model.dart';
@@ -8,6 +10,8 @@ import 'package:flutter/material.dart';
 
 class SelectConfigurationStore extends ValueNotifier<SelectConfigurationState> {
   final IGetRelatedEventsAndStandsUsecase getRelatedEventsAndStandsUsecase;
+  final ISetSelectedEventUsecase setSelectedEventUsecase;
+  final ISetSelectedStandUsecase setSelectedStandUsecase;
 
   RelatedEventsAndStandsModel? releatedEventsAndStandsModel;
   RelatedEventModel? relatedEventModelSelected;
@@ -18,6 +22,8 @@ class SelectConfigurationStore extends ValueNotifier<SelectConfigurationState> {
 
   SelectConfigurationStore({
     required this.getRelatedEventsAndStandsUsecase,
+    required this.setSelectedEventUsecase,
+    required this.setSelectedStandUsecase,
   }) : super(InitialSelectConfigurationState());
 
   Future<void> getRelatedEventsAndStands() async {
@@ -45,9 +51,15 @@ class SelectConfigurationStore extends ValueNotifier<SelectConfigurationState> {
     value = SelectedStandState();
   }
 
-  void confirmConfiguration() {
-    AppStand().eventSelected = relatedEventModelSelected;
-    AppStand().standSelected = relatedStandModelSelected;
+  Future<void> confirmConfiguration() async {
+    value = LoadingConfirmConfigurationState();
+
+    AppStand().selectedEvent = relatedEventModelSelected;
+    AppStand().selectedStand = relatedStandModelSelected;
+
+    await setSelectedEventUsecase(relatedEventModelSelected!);
+    await setSelectedStandUsecase(relatedStandModelSelected!);
+
     value = ConfirmedConfigurationState();
   }
 }

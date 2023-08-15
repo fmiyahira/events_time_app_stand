@@ -1,6 +1,7 @@
 import 'package:events_time_app_stand/flavors.dart';
 import 'package:events_time_app_stand/src/core/plugins/bluetooth_printer/bluetooth_printer.dart';
 import 'package:events_time_app_stand/src/core/plugins/register_dependencies_plugins.dart';
+import 'package:events_time_app_stand/src/features/auth/core/register_dependencies_auth.dart';
 import 'package:events_time_app_stand/src/features/menu/core/register_dependencies_menu.dart';
 import 'package:events_time_app_stand/src/routes/routes.dart';
 import 'package:events_time_microapp_auth/events_time_microapp_auth.dart';
@@ -34,8 +35,8 @@ class AppStand {
           AppStand().userLogged = userModel;
         },
         callbackAfterLogout: () {
-          AppStand().eventSelected = null;
-          AppStand().standSelected = null;
+          AppStand().selectedEvent = null;
+          AppStand().selectedStand = null;
           AppStand().userLogged = null;
         },
       ),
@@ -46,8 +47,8 @@ class AppStand {
   late ILocalStorage localStorage;
   late IRequesting requesting;
 
-  RelatedEventModel? eventSelected;
-  RelatedStandModel? standSelected;
+  RelatedEventModel? selectedEvent;
+  RelatedStandModel? selectedStand;
   UserModel? userLogged;
 
   Future<void> initialize() async {
@@ -78,8 +79,9 @@ class AppStand {
     final List<IRegisterDependencies> listInternalDependencies =
         <IRegisterDependencies>[
       RegisterDependenciesPlugins(),
-      RegisterDependenciesMenu(),
+      RegisterDependenciesAuth(),
       RegisterDependenciesConfiguration(),
+      RegisterDependenciesMenu(),
     ];
 
     for (final IRegisterDependencies internalDependency

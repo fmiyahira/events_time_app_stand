@@ -12,6 +12,8 @@ class SelectedEventState extends SelectConfigurationState {}
 
 class SelectedStandState extends SelectConfigurationState {}
 
+class LoadingConfirmConfigurationState extends SelectConfigurationState {}
+
 class ConfirmedConfigurationState extends SelectConfigurationState {}
 
 class ErrorSelectConfigurationState extends SelectConfigurationState {

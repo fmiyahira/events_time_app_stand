@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'dart:convert';
+
 import 'package:events_time_app_stand/src/features/configuration/domain/models/related_stand_model.dart';
 
 class RelatedEventModel {
@@ -24,4 +26,17 @@ class RelatedEventModel {
       ),
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'stands': stands.map((RelatedStandModel x) => x.toMap()).toList(),
+    };
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory RelatedEventModel.fromJson(String source) =>
+      RelatedEventModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

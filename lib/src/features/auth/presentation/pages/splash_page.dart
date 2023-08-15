@@ -1,3 +1,8 @@
+import 'package:events_time_app_stand/app_stand.dart';
+import 'package:events_time_app_stand/src/features/auth/presentation/controllers/splash_states.dart';
+import 'package:events_time_app_stand/src/features/auth/presentation/controllers/splash_store.dart';
+import 'package:events_time_app_stand/src/features/configuration/presentation/pages/select_configuration_page.dart';
+import 'package:events_time_app_stand/src/features/home_cashier/presentation/home_cashier_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -10,30 +15,49 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  // SplashController splashController = AppInjector.I.get();
+  SplashStore splashStore = AppStand().injector.get();
+  late Function() splashStoreListener;
 
   @override
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => _initialize());
+    splashStoreListener = _getSplashStoreListener;
+    splashStore.addListener(splashStoreListener);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      splashStore.verifyIsLogged();
+    });
   }
 
-  Future<void> _initialize() async {
-    // final bool hasLoggedUser = await splashController.hasLoggedUser();
-    if (!mounted) return;
-
-    // if (!hasLoggedUser) {
-    await Future<void>.delayed(const Duration(seconds: 2));
-
-    Navigator.of(context).pushReplacementNamed(
-      '/auth/login',
-    );
-    // return;
-    // }
-
-    // Navigator.of(context).pushReplacementNamed(VisitsPage.routeName);
+  @override
+  void dispose() {
+    splashStore.removeListener(splashStoreListener);
+    super.dispose();
   }
+
+  Function() get _getSplashStoreListener => () {
+        if (splashStore.value is LoggedWithEventAndStandState) {
+          Navigator.of(context).pushReplacementNamed(
+            HomeCashierPage.routeName,
+          );
+          return;
+        }
+
+        if (splashStore.value is LoggedWithoutEventAndStandState) {
+          Navigator.of(context).pushReplacementNamed(
+            SelectConfigurationPage.routeName,
+          );
+          return;
+        }
+
+        if (splashStore.value is NotLoggedState) {
+          Navigator.of(context).pushReplacementNamed(
+            '/auth/login',
+          );
+          return;
+        }
+      };
 
   @override
   Widget build(BuildContext context) {
