@@ -38,6 +38,8 @@ class SplashStore extends ValueNotifier<SplashState> {
         return;
       }
 
+      AppStand().userLogged = userLogged;
+
       final RelatedEventModel? relatedSelectedEventModel =
           await getSelectedEventUsecase();
       final RelatedStandModel? relatedSelectedStandModel =
@@ -51,7 +53,6 @@ class SplashStore extends ValueNotifier<SplashState> {
 
       AppStand().selectedEvent = relatedSelectedEventModel;
       AppStand().selectedStand = relatedSelectedStandModel;
-      AppStand().userLogged = userLogged;
 
       value = LoggedWithEventAndStandState();
     } catch (_) {

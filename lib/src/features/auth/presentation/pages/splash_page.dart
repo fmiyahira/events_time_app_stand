@@ -53,7 +53,7 @@ class _SplashPageState extends State<SplashPage> {
 
         if (splashStore.value is NotLoggedState) {
           Navigator.of(context).pushReplacementNamed(
-            '/auth/login',
+            'auth',
           );
           return;
         }

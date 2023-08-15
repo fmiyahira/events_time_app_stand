@@ -26,6 +26,9 @@ class AppStand {
     ...AppRoutes().routes,
   };
 
+  final GlobalKey<NavigatorState> mainNavigatorKey =
+      GlobalKey<NavigatorState>();
+
   List<ISubApp> subAppsRegistered = <ISubApp>[
     MicroappAuth(
       microappAuthConfig: MicroappAuthConfig(
@@ -72,6 +75,7 @@ class AppStand {
         requesting: requesting,
         injector: injector,
         localStorage: localStorage,
+        mainNavigatorKey: mainNavigatorKey,
       );
     }
 
@@ -140,6 +144,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       title: F.title,
       initialRoute: AppRoutes().initialRoute,
       routes: AppStand().allRoutes,
+      navigatorKey: AppStand().mainNavigatorKey,
     );
   }
 }

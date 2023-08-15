@@ -36,7 +36,7 @@ class _MenuDrawerWidgetState extends State<MenuDrawerWidget> {
             context,
           );
           Navigator.of(context).pushNamedAndRemoveUntil(
-            '/auth/login',
+            'auth',
             (_) => false,
           );
           return;
