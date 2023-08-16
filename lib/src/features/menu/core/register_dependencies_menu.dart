@@ -7,11 +7,7 @@ class RegisterDependenciesMenu implements IRegisterDependencies {
   Future<void> register() async {
     // Stores
     AppStand().injector.registerFactory<MenuStore>(
-          () => MenuStore(
-            logoutUsecase: AppStand().injector.get(),
-            deleteSelectedEventUsecase: AppStand().injector.get(),
-            deleteSelectedStandUsecase: AppStand().injector.get(),
-          ),
+          () => MenuStore(),
         );
   }
 }

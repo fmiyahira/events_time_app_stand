@@ -1,16 +1,16 @@
 import 'package:events_time_app_stand/flavors.dart';
 import 'package:events_time_app_stand/src/core/plugins/bluetooth_printer/bluetooth_printer.dart';
 import 'package:events_time_app_stand/src/core/plugins/register_dependencies_plugins.dart';
-import 'package:events_time_app_stand/src/features/auth/core/register_dependencies_auth.dart';
+import 'package:events_time_app_stand/src/features/home_cashier/presentation/home_cashier_page.dart';
 import 'package:events_time_app_stand/src/features/menu/core/register_dependencies_menu.dart';
 import 'package:events_time_app_stand/src/routes/routes.dart';
 import 'package:events_time_microapp_auth/events_time_microapp_auth.dart';
 import 'package:events_time_microapp_dependencies/events_time_microapp_dependencies.dart';
+import 'package:events_time_microapp_hub/microapp/hub_states.dart';
+import 'package:events_time_microapp_hub/microapp/microapp_hub.dart';
 import 'package:flutter/material.dart';
 
 import 'src/features/configuration/core/register_dependencies_configuration.dart';
-import 'src/features/configuration/domain/models/related_event_model.dart';
-import 'src/features/configuration/domain/models/related_stand_model.dart';
 import 'src/features/configuration/presentation/pages/select_configuration_page.dart';
 
 class AppStand {
@@ -32,16 +32,9 @@ class AppStand {
   List<ISubApp> subAppsRegistered = <ISubApp>[
     MicroappAuth(
       microappAuthConfig: MicroappAuthConfig(
-        authGoalEnum: AuthGoalEnum.user,
+        authGoalEnum: AuthGoalEnum.client,
         destinationAfterLogin: SelectConfigurationPage.routeName,
-        callbackAfterLogin: (UserModel userModel) {
-          AppStand().userLogged = userModel;
-        },
-        callbackAfterLogout: () {
-          AppStand().selectedEvent = null;
-          AppStand().selectedStand = null;
-          AppStand().userLogged = null;
-        },
+        destinationHome: HomeCashierPage.routeName,
       ),
     ),
   ];
@@ -49,10 +42,11 @@ class AppStand {
   late IInjector injector;
   late ILocalStorage localStorage;
   late IRequesting requesting;
+  late MicroappHub hub;
 
-  RelatedEventModel? selectedEvent;
-  RelatedStandModel? selectedStand;
   UserModel? userLogged;
+  LoggedEventModel? loggedEvent;
+  LoggedStandModel? loggedStand;
 
   Future<void> initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -65,6 +59,12 @@ class AppStand {
       baseUrl: F.baseUrl,
       localStorage: localStorage,
     );
+    hub = MicroappHub();
+
+    final Map<String, ValueNotifier<dynamic>> messengers =
+        <String, ValueNotifier<dynamic>>{
+      'hub': hub,
+    };
 
     for (final ISubApp subApp in subAppsRegistered) {
       final SubAppRegistration registration = subApp.register();
@@ -76,6 +76,7 @@ class AppStand {
         injector: injector,
         localStorage: localStorage,
         mainNavigatorKey: mainNavigatorKey,
+        messengers: messengers,
       );
     }
 
@@ -83,7 +84,6 @@ class AppStand {
     final List<IRegisterDependencies> listInternalDependencies =
         <IRegisterDependencies>[
       RegisterDependenciesPlugins(),
-      RegisterDependenciesAuth(),
       RegisterDependenciesConfiguration(),
       RegisterDependenciesMenu(),
     ];
@@ -93,7 +93,31 @@ class AppStand {
       await internalDependency.register();
     }
 
+    registerMessengersListeners();
+
     runApp(const MyApp());
+  }
+
+  void registerMessengersListeners() {
+    MicroappAuth.hub.addListener(() {
+      if (hub.value is ResponseUserLoggedHubState) {
+        userLogged =
+            (hub.value as ResponseUserLoggedHubState).payload as UserModel?;
+        return;
+      }
+
+      if (hub.value is ResponseEventSelectedHubState) {
+        loggedEvent = (hub.value as ResponseEventSelectedHubState).payload
+            as LoggedEventModel?;
+        return;
+      }
+
+      if (hub.value is ResponseStandSelectedHubState) {
+        loggedStand = (hub.value as ResponseStandSelectedHubState).payload
+            as LoggedStandModel?;
+        return;
+      }
+    });
   }
 }
 

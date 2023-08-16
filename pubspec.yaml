@@ -36,6 +36,8 @@ dependencies:
     path: "../events_time_microapp_dependencies"
   events_time_microapp_auth:
     path: "../events_time_microapp_auth"
+  events_time_microapp_hub:
+    path: "../events_time_microapp_hub"
   flutter_flavorizr: ^2.1.5
   permission_handler: ^10.4.2
   esc_pos_utils: ^1.1.0
