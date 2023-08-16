@@ -43,6 +43,7 @@ class AppStand {
   late ILocalStorage localStorage;
   late IRequesting requesting;
   late MicroappHub hub;
+  late Map<String, ValueNotifier<dynamic>> messengers;
 
   UserModel? userLogged;
   LoggedEventModel? loggedEvent;
@@ -51,6 +52,18 @@ class AppStand {
   Future<void> initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
 
+    await initializeServices();
+
+    await initializeSubApps();
+
+    await registerDependencies();
+
+    registerMessengersListeners();
+
+    runApp(const MyApp());
+  }
+
+  Future<void> initializeServices() async {
     injector = AppInjector();
     localStorage = LocalStorageSembastImpl(
       await SembastImpl().openDatabase(),
@@ -61,11 +74,12 @@ class AppStand {
     );
     hub = MicroappHub();
 
-    final Map<String, ValueNotifier<dynamic>> messengers =
-        <String, ValueNotifier<dynamic>>{
+    messengers = <String, ValueNotifier<dynamic>>{
       'hub': hub,
     };
+  }
 
+  Future<void> initializeSubApps() async {
     for (final ISubApp subApp in subAppsRegistered) {
       final SubAppRegistration registration = subApp.register();
 
@@ -79,7 +93,9 @@ class AppStand {
         messengers: messengers,
       );
     }
+  }
 
+  Future<void> registerDependencies() async {
     // Register dependencies
     final List<IRegisterDependencies> listInternalDependencies =
         <IRegisterDependencies>[
@@ -92,10 +108,6 @@ class AppStand {
         in listInternalDependencies) {
       await internalDependency.register();
     }
-
-    registerMessengersListeners();
-
-    runApp(const MyApp());
   }
 
   void registerMessengersListeners() {
