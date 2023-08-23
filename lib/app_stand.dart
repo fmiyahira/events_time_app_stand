@@ -8,6 +8,7 @@ import 'package:events_time_microapp_auth/events_time_microapp_auth.dart';
 import 'package:events_time_microapp_dependencies/events_time_microapp_dependencies.dart';
 import 'package:events_time_microapp_hub/microapp/hub_states.dart';
 import 'package:events_time_microapp_hub/microapp/microapp_hub.dart';
+import 'package:events_time_microapp_menu/events_time_microapp_menu.dart';
 import 'package:flutter/material.dart';
 
 import 'src/features/configuration/core/register_dependencies_configuration.dart';
@@ -35,6 +36,12 @@ class AppStand {
         authGoalEnum: AuthGoalEnum.client,
         destinationAfterLogin: SelectConfigurationPage.routeName,
         destinationHome: HomeCashierPage.routeName,
+      ),
+    ),
+    MicroappMenu(
+      microappMenuConfig: MicroappMenuConfig(
+        destinationAfterConfirm: '',
+        menuGoalEnum: MenuGoalEnum.stand,
       ),
     ),
   ];
