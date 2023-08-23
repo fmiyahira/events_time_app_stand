@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:io';
 
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:events_time_app_stand/src/core/plugins/bluetooth_printer/bluetooth_printer.dart';
@@ -36,7 +37,7 @@ class BluetoothPrinterImpl implements IBluetoothPrinter {
         bluetoothManager.discovery().listen((
       BluetoothDevice device,
     ) {
-      if (kDebugMode) print(device.address);
+      if (kDebugMode) print('printer address: ${device.address}');
 
       if (address == device.address) completer.complete(true);
     }, onError: (Object error) {
@@ -53,7 +54,7 @@ class BluetoothPrinterImpl implements IBluetoothPrinter {
   }
 
   bool validateAddress(String address) {
-    if (address.length < 40 || address.length > 40) return false;
+    if (address.length < 58 || address.length > 58) return false;
     if (!address.startsWith('E-')) return false;
     if (!address.endsWith('-T')) return false;
 
@@ -61,7 +62,8 @@ class BluetoothPrinterImpl implements IBluetoothPrinter {
   }
 
   String cleanAddress(String address) {
-    return address.substring(2, address.length - 2);
+    final String clearAddress = address.substring(2, address.length - 2);
+    return clearAddress.split('|')[Platform.isIOS ? 0 : 1];
   }
 
   @override

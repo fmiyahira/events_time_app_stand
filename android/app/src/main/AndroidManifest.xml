@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.INTERNET" />
 
   <!-- Request legacy Bluetooth permissions on older devices. -->
   <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
