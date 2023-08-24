@@ -35,10 +35,6 @@ class _MenuDrawerWidgetState extends State<MenuDrawerWidget> {
             'Até a próxima!',
             context,
           );
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            'auth',
-            (_) => false,
-          );
           return;
         }
       };
