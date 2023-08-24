@@ -75,15 +75,18 @@ class AppStand {
     localStorage = LocalStorageSembastImpl(
       await SembastImpl().openDatabase(),
     );
-    requesting = Requesting(
-      baseUrl: F.baseUrl,
-      localStorage: localStorage,
-    );
+
     hub = MicroappHub();
 
     messengers = <String, ValueNotifier<dynamic>>{
       'hub': hub,
     };
+
+    requesting = Requesting(
+      baseUrl: F.baseUrl,
+      localStorage: localStorage,
+      messengers: messengers,
+    );
   }
 
   Future<void> initializeSubApps() async {
