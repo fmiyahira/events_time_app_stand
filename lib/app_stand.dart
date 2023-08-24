@@ -84,7 +84,6 @@ class AppStand {
 
     requesting = Requesting(
       baseUrl: F.baseUrl,
-      localStorage: localStorage,
       messengers: messengers,
     );
   }
