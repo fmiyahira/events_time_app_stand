@@ -51,21 +51,20 @@
     <true/>
     <key>NSCameraUsageDescription</key>
     <string>This app needs camera access to scan QR codes</string>
-
-    <key>NSBluetoothAlwaysUsageDescription</key>  
-    <string>Permissão necessário para uso da impressora bluetooh</string>  
-    <key>NSBluetoothPeripheralUsageDescription</key>  
-    <string>Permissão necessário para uso da impressora bluetooh</string>  
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>  
-    <string>Permissão necessário para uso da impressora bluetooh</string>  
-    <key>NSLocationAlwaysUsageDescription</key>  
-    <string>Permissão necessário para uso da impressora bluetooh</string>  
-    <key>NSLocationWhenInUseUsageDescription</key>  
+    <key>NSBluetoothAlwaysUsageDescription</key>
     <string>Permissão necessário para uso da impressora bluetooh</string>
-    <key>UIBackgroundModes</key>  
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>Permissão necessário para uso da impressora bluetooh</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Permissão necessário para uso da impressora bluetooh</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Permissão necessário para uso da impressora bluetooh</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Permissão necessário para uso da impressora bluetooh</string>
+    <key>UIBackgroundModes</key>
     <array>
-        <string>bluetooth-central</string>
-        <string>bluetooth-peripheral</string>
+      <string>bluetooth-central</string>
+      <string>bluetooth-peripheral</string>
     </array>
   </dict>
 </plist>

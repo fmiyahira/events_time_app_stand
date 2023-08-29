@@ -27,7 +27,7 @@ class F {
       case Flavor.hom:
         return 'http://192.168.100.82:5000';
       case Flavor.prd:
-        return 'http://localhost:5000';
+        return 'http://192.168.0.9:5000';
     }
   }
 }
