@@ -49,6 +49,12 @@ dependencies:
       ref: v0.1.5
   qr_code_scanner: ^1.0.1
   scanning_effect: ^1.0.4
+  # firebase
+  firebase_core: ^2.15.1
+  firebase_messaging: ^14.6.7
+  firebase_crashlytics: ^3.3.4
+  firebase_remote_config: ^4.2.5
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -71,23 +77,35 @@ flavorizr:
       app:
         name: "EventsTime (DEV)"
       android:
-        applicationId: "com.dev.events.time"
+        applicationId: "com.dev.stand.events.time"
+        firebase:
+          config: ".firebase/android/google-services-dev.json"
       ios:
-        bundleId: "com.dev.events.time"
+        bundleId: "com.dev.stand.events.time"
+        firebase:
+          config: ".firebase/ios/GoogleService-Info-dev.plist"
     hom:
       app:
         name: "EventsTime (HOM)"
       android:
         applicationId: "com.hom.events.time"
+        firebase:
+          config: ".firebase/android/google-services-hom.json"
       ios:
         bundleId: "com.hom.events.time"
+        firebase:
+          config: ".firebase/ios/GoogleService-Info-hom.plist"
     prd:
       app:
         name: "EventsTime"
       android:
         applicationId: "com.prd.events.time"
+        firebase:
+          config: ".firebase/android/google-services-prd.json"
       ios:
         bundleId: "com.prd.events.time"
+        firebase:
+          config: ".firebase/ios/GoogleService-Info-prd.plist"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

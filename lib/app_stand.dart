@@ -9,6 +9,7 @@ import 'package:events_time_microapp_dependencies/events_time_microapp_dependenc
 import 'package:events_time_microapp_hub/microapp/hub_states.dart';
 import 'package:events_time_microapp_hub/microapp/microapp_hub.dart';
 import 'package:events_time_microapp_menu/events_time_microapp_menu.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'src/features/configuration/core/register_dependencies_configuration.dart';
@@ -71,6 +72,8 @@ class AppStand {
   }
 
   Future<void> initializeServices() async {
+    await Firebase.initializeApp();
+
     injector = AppInjector();
     localStorage = LocalStorageSembastImpl(
       await SembastImpl().openDatabase(),
